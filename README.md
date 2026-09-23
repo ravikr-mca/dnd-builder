@@ -24,6 +24,7 @@ No environment variables or backend are required — the app is fully client-sid
 - **Palette**: text / image / button / container blocks — drag onto the canvas or click `+` to add.
 - **Canvas**: drag to reorder blocks; click a block to select it (outline shows selection); `×` deletes it.
 - **Properties panel**: edit the selected block's content, color, font size, alignment, URL, and size — changes apply live.
+- **Undo/Redo**: reverts/reapplies add, delete, reorder, clear, and load/import actions (up to 50 steps). Property edits (typing in the Properties panel) are intentionally excluded — see Trade-offs below.
 - **Save/Load**: `Save`/`Load` persist to this browser's `localStorage`; `Export JSON`/`Import JSON` download/upload a layout file.
 - **Responsive**: three-column layout on desktop; sidebars stack below the canvas under 900px width.
 
@@ -89,5 +90,6 @@ Verified empirically with a temporary `console.count()` probe in `Block.tsx` (ad
 
 ## Trade-offs / not implemented (time-boxed)
 
-- Undo/redo and snap-to-grid (bonus items) were skipped to keep the core requirements — architecture, drag interaction, performance, and security — fully implemented rather than partially covering everything.
+- Snap-to-grid (a bonus item) was skipped — doesn't fit this layout model (a vertical block stack, not free-form x/y positioning).
+- Undo/redo covers structural actions (add/remove/reorder/clear/load/import) but deliberately excludes property edits (color, text content, size, etc.). Snapshotting the layout on every keystroke would make undo granular to a single character — worse UX than no undo for that action — so an edit is only undoable by undoing past it to the state before the edit began.
 - Styling uses CSS Modules (one `*.module.css` file per component, plus shared design tokens as CSS custom properties in `src/index.css`) — one of the styling approaches explicitly listed as acceptable in the brief. Chosen over plain global CSS for automatic class-name scoping, and over Tailwind/MUI/Bootstrap to add zero new dependencies (Vite and the existing `tsconfig.app.json` already support `.module.css` out of the box). No external fonts or network requests — the app stays fully client-side, matching the "no backend" design above.

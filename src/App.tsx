@@ -32,8 +32,21 @@ const restrictSortableBlocksOnly: Modifier = (args) => {
 };
 
 export default function App() {
-  const { order, addBlock, reorder, updateBlockProps, save, loadSaved, exportFile, importFromText, clear } =
-    useBuilder();
+  const {
+    order,
+    addBlock,
+    reorder,
+    updateBlockProps,
+    save,
+    loadSaved,
+    exportFile,
+    importFromText,
+    clear,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+  } = useBuilder();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [bannerError, setBannerError] = useState<string | null>(null);
   const [initializing, setInitializing] = useState(true);
@@ -128,6 +141,10 @@ export default function App() {
           onExport={exportFile}
           onImportFile={importFromText}
           onClear={clear}
+          onUndo={undo}
+          onRedo={redo}
+          canUndo={canUndo}
+          canRedo={canRedo}
         />
 
         <main className={styles.main}>

@@ -8,9 +8,23 @@ interface ToolbarProps {
   onExport: () => void;
   onImportFile: (json: string) => { success: boolean; error?: string };
   onClear: () => void;
+  onUndo: () => void;
+  onRedo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
 }
 
-export function Toolbar({ onSave, onLoadSaved, onExport, onImportFile, onClear }: ToolbarProps) {
+export function Toolbar({
+  onSave,
+  onLoadSaved,
+  onExport,
+  onImportFile,
+  onClear,
+  onUndo,
+  onRedo,
+  canUndo,
+  canRedo,
+}: ToolbarProps) {
   const [status, setStatus] = useState<{ kind: 'idle' | 'ok' | 'error'; message: string }>({
     kind: 'idle',
     message: '',
@@ -58,6 +72,24 @@ export function Toolbar({ onSave, onLoadSaved, onExport, onImportFile, onClear }
   return (
     <div className={styles.toolbar}>
       <div className={styles.actions}>
+        <button
+          type="button"
+          className={cx(styles.btn, styles.btnGhost)}
+          onClick={onUndo}
+          disabled={!canUndo}
+          aria-label="Undo"
+        >
+          Undo
+        </button>
+        <button
+          type="button"
+          className={cx(styles.btn, styles.btnGhost)}
+          onClick={onRedo}
+          disabled={!canRedo}
+          aria-label="Redo"
+        >
+          Redo
+        </button>
         <button type="button" className={cx(styles.btn, styles.btnPrimary)} onClick={handleSave}>
           Save
         </button>

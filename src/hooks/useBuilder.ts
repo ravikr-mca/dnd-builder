@@ -22,6 +22,10 @@ export function useBuilder() {
   const reorder = useBuilderStore((s) => s.reorder);
   const replaceLayout = useBuilderStore((s) => s.replaceLayout);
   const clear = useBuilderStore((s) => s.clear);
+  const undo = useBuilderStore((s) => s.undo);
+  const redo = useBuilderStore((s) => s.redo);
+  const canUndo = useBuilderStore((s) => s.past.length > 0);
+  const canRedo = useBuilderStore((s) => s.future.length > 0);
 
   const save = useCallback(() => {
     const { blocks, order: currentOrder } = useBuilderStore.getState();
@@ -64,6 +68,10 @@ export function useBuilder() {
     exportFile,
     loadSaved,
     importFromText,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
   };
 }
 
