@@ -107,7 +107,7 @@ export default function App() {
         <div className={styles.hero}>
           <img
             className={styles.heroImage}
-            src="/images/hero-banner.jpg"
+            src={`${import.meta.env.BASE_URL}images/hero-banner.jpg`}
             alt="Illustration of draggable text, image, button, and container blocks being arranged into a page layout"
           />
           <div className={styles.heroCaption}>
