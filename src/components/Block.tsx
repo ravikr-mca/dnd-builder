@@ -93,7 +93,12 @@ function BlockImpl({ id, selected, onSelect, onRemove }: BlockProps) {
 
       {type === 'image' &&
         (safeSrc ? (
-          <img src={safeSrc} alt="" style={{ width: props.width, height: props.height }} />
+          <img
+            src={safeSrc}
+            alt="Image block content"
+            className="block__image"
+            style={{ width: props.width, height: props.height }}
+          />
         ) : (
           <div className="block__image-placeholder">No image</div>
         ))}
