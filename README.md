@@ -3,6 +3,8 @@
 A mini page builder: add blocks from a palette, drag to position/reorder them on a canvas,
 edit the selected block live via a properties panel, and save/load the layout as JSON.
 
+**Live demo:** [ravikr-mca.github.io/dnd-builder](https://ravikr-mca.github.io/dnd-builder/)
+
 ## Install & Run
 
 ```bash
