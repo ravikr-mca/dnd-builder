@@ -8,7 +8,11 @@ export function isSafeUrl(value: string): boolean {
   const trimmed = value.trim();
   if (trimmed.startsWith('/') || trimmed.startsWith('./') || trimmed.startsWith('../')) return true;
   try {
-    const url = new URL(trimmed, window.location.origin);
+    // No base argument: by this point `trimmed` is expected to be an absolute
+    // URL (relative forms were already handled above), and an absolute URL
+    // ignores its base anyway — so a base was never actually load-bearing
+    // here, just an unnecessary dependency on a browser global.
+    const url = new URL(trimmed);
     return url.protocol === 'http:' || url.protocol === 'https:';
   } catch {
     return false;
