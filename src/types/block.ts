@@ -35,7 +35,7 @@ export function defaultPropsFor(type: BlockType): BlockProps {
     case 'text':
       return { content: 'Edit this text', color: '#1a1a1a', fontSize: 16, align: 'left' };
     case 'image':
-      return { src: 'https://placehold.co/300x150', width: 300, height: 150 };
+      return { src: '/images/ui-ux-wireframe.jpg', width: 300, height: 150 };
     case 'button':
       return { content: 'Click me', color: '#2563eb', href: '' };
     case 'container':
