@@ -1,0 +1,72 @@
+.block {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 2.25rem 0.75rem 0.75rem;
+  background: var(--sky-bg);
+  cursor: grab;
+  transition: var(--transition);
+  transition-property: outline-color, box-shadow;
+}
+
+.blockSelected {
+  outline: 2px solid var(--sky-gold);
+  outline-offset: 1px;
+  box-shadow: var(--shadow-soft);
+}
+
+.block p {
+  margin: 0;
+  word-break: break-word;
+}
+
+.remove {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border: none;
+  background: var(--sky-card);
+  color: var(--ink-muted);
+  border-radius: 50%;
+  cursor: pointer;
+  line-height: 1;
+  transition: var(--transition);
+  transition-property: background-color, color;
+}
+
+.remove:hover {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.remove:focus-visible {
+  outline: 2px solid var(--sky-accent);
+  outline-offset: 2px;
+}
+
+.button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  color: #fff;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+}
+
+.imagePlaceholder {
+  padding: 2rem;
+  background: var(--sky-accent-soft);
+  text-align: center;
+  color: var(--ink-muted);
+  border-radius: var(--radius-sm);
+}
+
+.image {
+  display: block;
+  max-width: 100%;
+}
+
+.container {
+  border-radius: var(--radius-sm);
+}

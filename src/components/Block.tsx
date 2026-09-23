@@ -3,6 +3,8 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useBlock } from '../hooks/useBuilder';
 import { isSafeColor, isSafeUrl } from '../utils/validate';
+import { cx } from '../utils/helpers';
+import styles from './Block.module.css';
 
 interface BlockProps {
   id: string;
@@ -58,14 +60,14 @@ function BlockImpl({ id, selected, onSelect, onRemove }: BlockProps) {
     <div
       ref={setNodeRef}
       style={style}
-      className={`block block--${type}${selected ? ' block--selected' : ''}`}
+      className={cx(styles.block, selected && styles.blockSelected)}
       onClick={handleSelect}
       {...attributes}
       {...listeners}
     >
       <button
         type="button"
-        className="block__remove"
+        className={styles.remove}
         onClick={handleRemove}
         aria-label="Delete block"
       >
@@ -82,7 +84,7 @@ function BlockImpl({ id, selected, onSelect, onRemove }: BlockProps) {
 
       {type === 'button' && (
         <a
-          className="block__button"
+          className={styles.button}
           style={{ backgroundColor: safeColor }}
           href={safeHref || undefined}
           onClick={(e) => e.preventDefault()}
@@ -96,16 +98,16 @@ function BlockImpl({ id, selected, onSelect, onRemove }: BlockProps) {
           <img
             src={safeSrc}
             alt="Image block content"
-            className="block__image"
+            className={styles.image}
             style={{ width: props.width, height: props.height }}
           />
         ) : (
-          <div className="block__image-placeholder">No image</div>
+          <div className={styles.imagePlaceholder}>No image</div>
         ))}
 
       {type === 'container' && (
         <div
-          className="block__container"
+          className={styles.container}
           style={{ backgroundColor: safeColor, width: props.width, height: props.height }}
         />
       )}

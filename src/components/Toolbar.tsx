@@ -1,4 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
+import { cx } from '../utils/helpers';
+import styles from './Toolbar.module.css';
 
 interface ToolbarProps {
   onSave: () => void;
@@ -54,15 +56,29 @@ export function Toolbar({ onSave, onLoadSaved, onExport, onImportFile, onClear }
   );
 
   return (
-    <div className="toolbar">
-      <div className="toolbar__actions">
-        <button type="button" onClick={handleSave}>Save</button>
-        <button type="button" onClick={handleLoad}>Load</button>
-        <button type="button" onClick={onExport}>Export JSON</button>
-        <button type="button" onClick={handleImportClick} disabled={busy}>
+    <div className={styles.toolbar}>
+      <div className={styles.actions}>
+        <button type="button" className={cx(styles.btn, styles.btnPrimary)} onClick={handleSave}>
+          Save
+        </button>
+        <button type="button" className={cx(styles.btn, styles.btnGhost)} onClick={handleLoad}>
+          Load
+        </button>
+        <button type="button" className={cx(styles.btn, styles.btnPrimary)} onClick={onExport}>
+          Export JSON
+        </button>
+        <button
+          type="button"
+          className={cx(styles.btn, styles.btnGhost)}
+          onClick={handleImportClick}
+          disabled={busy}
+        >
+          {busy && <span className={styles.spinner} aria-hidden="true" />}
           {busy ? 'Importing…' : 'Import JSON'}
         </button>
-        <button type="button" className="toolbar__danger" onClick={onClear}>Clear</button>
+        <button type="button" className={cx(styles.btn, styles.btnDanger)} onClick={onClear}>
+          Clear
+        </button>
         <input
           ref={fileInputRef}
           type="file"
@@ -72,7 +88,14 @@ export function Toolbar({ onSave, onLoadSaved, onExport, onImportFile, onClear }
         />
       </div>
       {status.kind !== 'idle' && (
-        <div className={`toolbar__status toolbar__status--${status.kind}`} role="status">
+        <div
+          className={cx(
+            styles.status,
+            status.kind === 'ok' && styles.statusOk,
+            status.kind === 'error' && styles.statusError,
+          )}
+          role="status"
+        >
           {status.message}
         </div>
       )}

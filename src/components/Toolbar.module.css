@@ -1,0 +1,123 @@
+.toolbar {
+  padding: 0.75rem 1.5rem;
+  background: var(--sky-card);
+  border-bottom: 1px solid var(--border);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  font-size: 0.85rem;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  transition-property: transform, box-shadow, background-color, border-color, color;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--sky-accent);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+.btnPrimary {
+  background: var(--sky-primary);
+  color: #fff;
+  box-shadow: var(--shadow-soft);
+}
+
+.btnPrimary:hover {
+  background: var(--sky-primary-deep);
+  box-shadow: 0 4px 8px rgba(30, 58, 138, 0.1), 0 18px 32px -10px rgba(30, 58, 138, 0.32);
+}
+
+.btnGhost {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+.btnGhost:hover {
+  border-color: var(--sky-accent);
+  color: var(--sky-primary);
+  background: var(--sky-accent-soft);
+}
+
+.btnDanger {
+  background: var(--danger-bg);
+  border-color: var(--danger-border);
+  color: var(--danger);
+}
+
+.btnDanger:hover {
+  background: var(--danger-border);
+}
+
+.spinner {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  animation: spin 700ms linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 1400ms;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.status {
+  margin-top: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.status::before {
+  content: '';
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.statusOk {
+  color: var(--success);
+}
+
+.statusError {
+  color: var(--danger);
+}

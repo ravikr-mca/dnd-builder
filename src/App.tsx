@@ -17,8 +17,10 @@ import { PropertiesPanel } from './components/PropertiesPanel';
 import { Toolbar } from './components/Toolbar';
 import { useBuilder } from './hooks/useBuilder';
 import { resolveDragAction } from './utils/dragLogic';
+import { cx } from './utils/helpers';
 import { BLOCK_TYPE_LABELS, type BlockType } from './types/block';
-import './App.css';
+import styles from './App.module.css';
+import paletteStyles from './components/Palette.module.css';
 
 // Restrict block *reordering* drags to the canvas bounds (the "dragged out of
 // bounds" edge case) without restricting palette→canvas drags, which need to
@@ -80,24 +82,41 @@ export default function App() {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="app">
-        <header className="app__header">
+      <div className={styles.app}>
+        <header className={styles.header}>
+          <svg
+            className={styles.headerIcon}
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="3" y="3" width="7" height="7" rx="1.5" />
+            <rect x="14" y="3" width="7" height="7" rx="1.5" />
+            <rect x="3" y="14" width="7" height="7" rx="1.5" />
+            <rect x="14" y="14" width="7" height="7" rx="1.5" />
+          </svg>
           <h1>Drag &amp; Drop Builder</h1>
         </header>
 
-        <div className="hero">
+        <div className={styles.hero}>
           <img
-            className="hero__image"
-            src="/images/ui-ux-wireframe.jpg"
-            alt="Wireframe and UI design mockups on a desk"
+            className={styles.heroImage}
+            src="/images/hero-banner.jpg"
+            alt="Illustration of draggable text, image, button, and container blocks being arranged into a page layout"
           />
-          <div className="hero__caption">
+          <div className={styles.heroCaption}>
             <p>Design layouts visually — drag, drop, done.</p>
           </div>
         </div>
 
         {bannerError && (
-          <div className="app__banner app__banner--error" role="alert">
+          <div className={cx(styles.banner, styles.bannerError)} role="alert">
             {bannerError}
             <button type="button" onClick={() => setBannerError(null)} aria-label="Dismiss">×</button>
           </div>
@@ -111,20 +130,20 @@ export default function App() {
           onClear={clear}
         />
 
-        <main className="app__main">
-          <aside className="app__sidebar">
+        <main className={styles.main}>
+          <aside className={styles.sidebar}>
             <Palette onAdd={addBlock} />
           </aside>
 
-          <section className="app__canvas-area">
+          <section className={styles.canvasArea}>
             {initializing ? (
-              <div className="canvas__loading">Loading…</div>
+              <div className={styles.loading}>Loading…</div>
             ) : (
               <Canvas />
             )}
           </section>
 
-          <aside className="app__sidebar">
+          <aside className={styles.sidebar}>
             <PropertiesPanel onChange={updateBlockProps} />
           </aside>
         </main>
@@ -132,7 +151,9 @@ export default function App() {
 
       <DragOverlay>
         {activeType ? (
-          <div className="palette__item palette__item--overlay">{BLOCK_TYPE_LABELS[activeType]}</div>
+          <div className={cx(paletteStyles.item, paletteStyles.itemOverlay)}>
+            {BLOCK_TYPE_LABELS[activeType]}
+          </div>
         ) : null}
       </DragOverlay>
     </DndContext>

@@ -2,6 +2,8 @@ import { useCallback } from 'react';
 import { useSelectedBlock } from '../hooks/useBuilder';
 import { isSafeColor, isSafeUrl } from '../utils/validate';
 import type { BlockProps } from '../types/block';
+import styles from './PropertiesPanel.module.css';
+import shared from './shared.module.css';
 
 export function PropertiesPanel({
   onChange,
@@ -19,9 +21,9 @@ export function PropertiesPanel({
 
   if (!block) {
     return (
-      <div className="properties">
-        <h2 className="panel__title">Properties</h2>
-        <p className="properties__empty">Select a block to edit its properties</p>
+      <div className={styles.properties}>
+        <h2 className={shared.panelTitle}>Properties</h2>
+        <p className={styles.empty}>Select a block to edit its properties</p>
       </div>
     );
   }
@@ -33,11 +35,11 @@ export function PropertiesPanel({
   const urlInvalid = urlField !== null && urlValue !== '' && !isSafeUrl(urlValue);
 
   return (
-    <div className="properties">
-      <h2 className="panel__title">Properties — {block.type}</h2>
+    <div className={styles.properties}>
+      <h2 className={shared.panelTitle}>Properties — {block.type}</h2>
 
       {(block.type === 'text' || block.type === 'button') && (
-        <label className="field">
+        <label className={styles.field}>
           Content
           <textarea
             value={props.content ?? ''}
@@ -48,7 +50,7 @@ export function PropertiesPanel({
       )}
 
       {block.type !== 'image' && (
-        <label className="field">
+        <label className={styles.field}>
           Color
           <input
             type="text"
@@ -56,13 +58,15 @@ export function PropertiesPanel({
             placeholder="#2563eb"
             onChange={(e) => set({ color: e.target.value })}
           />
-          {colorInvalid && <span className="field__error">Unsafe or invalid color value — ignored on render.</span>}
+          {colorInvalid && (
+            <span className={styles.fieldError}>Unsafe or invalid color value — ignored on render.</span>
+          )}
         </label>
       )}
 
       {block.type === 'text' && (
         <>
-          <label className="field">
+          <label className={styles.field}>
             Font size
             <input
               type="number"
@@ -72,7 +76,7 @@ export function PropertiesPanel({
               onChange={(e) => set({ fontSize: Number(e.target.value) })}
             />
           </label>
-          <label className="field">
+          <label className={styles.field}>
             Align
             <select value={props.align ?? 'left'} onChange={(e) => set({ align: e.target.value as BlockProps['align'] })}>
               <option value="left">Left</option>
@@ -84,7 +88,7 @@ export function PropertiesPanel({
       )}
 
       {urlField && (
-        <label className="field">
+        <label className={styles.field}>
           {urlField === 'src' ? 'Image URL' : 'Link URL'}
           <input
             type="text"
@@ -93,14 +97,14 @@ export function PropertiesPanel({
             onChange={(e) => set({ [urlField]: e.target.value })}
           />
           {urlInvalid && (
-            <span className="field__error">Only http(s) or relative URLs are allowed — ignored on render.</span>
+            <span className={styles.fieldError}>Only http(s) or relative URLs are allowed — ignored on render.</span>
           )}
         </label>
       )}
 
       {(block.type === 'image' || block.type === 'container') && (
         <>
-          <label className="field">
+          <label className={styles.field}>
             Width (px)
             <input
               type="number"
@@ -110,7 +114,7 @@ export function PropertiesPanel({
               onChange={(e) => set({ width: Number(e.target.value) })}
             />
           </label>
-          <label className="field">
+          <label className={styles.field}>
             Height (px)
             <input
               type="number"

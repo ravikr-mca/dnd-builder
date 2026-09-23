@@ -90,4 +90,4 @@ Verified empirically with a temporary `console.count()` probe in `Block.tsx` (ad
 ## Trade-offs / not implemented (time-boxed)
 
 - Undo/redo and snap-to-grid (bonus items) were skipped to keep the core requirements — architecture, drag interaction, performance, and security — fully implemented rather than partially covering everything.
-- Styling is plain CSS by design (explicitly listed as an acceptable option in the brief) — no UI framework dependency.
+- Styling uses CSS Modules (one `*.module.css` file per component, plus shared design tokens as CSS custom properties in `src/index.css`) — one of the styling approaches explicitly listed as acceptable in the brief. Chosen over plain global CSS for automatic class-name scoping, and over Tailwind/MUI/Bootstrap to add zero new dependencies (Vite and the existing `tsconfig.app.json` already support `.module.css` out of the box). No external fonts or network requests — the app stays fully client-side, matching the "no backend" design above.

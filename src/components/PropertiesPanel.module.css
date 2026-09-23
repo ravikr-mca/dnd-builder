@@ -1,0 +1,49 @@
+.properties {
+  font-family: var(--font-sans);
+}
+
+.empty {
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+  font-family: var(--font-display);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  margin-bottom: 0.85rem;
+  color: var(--ink-muted);
+}
+
+.field input,
+.field textarea,
+.field select {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-family: inherit;
+  color: var(--ink);
+  transition: var(--transition);
+  transition-property: border-color, box-shadow;
+}
+
+.field input:focus-visible,
+.field textarea:focus-visible,
+.field select:focus-visible {
+  outline: none;
+  border-color: var(--sky-accent);
+  box-shadow: 0 0 0 3px var(--sky-accent-soft);
+}
+
+.field textarea {
+  min-height: 4rem;
+  resize: vertical;
+}
+
+.fieldError {
+  color: var(--danger);
+  font-size: 0.72rem;
+}

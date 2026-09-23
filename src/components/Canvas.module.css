@@ -1,0 +1,24 @@
+.canvas {
+  min-height: 60vh;
+  background: var(--sky-card);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: var(--transition);
+  transition-property: border-color, background-color;
+}
+
+.canvasOver {
+  border-color: var(--sky-accent);
+  background: var(--sky-accent-soft);
+}
+
+.empty {
+  margin: auto;
+  color: var(--ink-muted);
+  font-size: 0.95rem;
+  font-family: var(--font-display);
+}

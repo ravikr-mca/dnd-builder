@@ -3,6 +3,8 @@ import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Block } from './Block';
 import { useBuilder } from '../hooks/useBuilder';
+import { cx } from '../utils/helpers';
+import styles from './Canvas.module.css';
 
 export const CANVAS_DROPPABLE_ID = 'canvas';
 
@@ -18,11 +20,11 @@ export function Canvas() {
   return (
     <div
       ref={setNodeRef}
-      className={`canvas${isOver ? ' canvas--over' : ''}`}
+      className={cx(styles.canvas, isOver && styles.canvasOver)}
       onClick={() => selectBlock(null)}
     >
       {order.length === 0 ? (
-        <div className="canvas__empty">Drag a block here to get started</div>
+        <div className={styles.empty}>Drag a block here to get started</div>
       ) : (
         <SortableContext items={order} strategy={verticalListSortingStrategy}>
           {order.map((id) => (

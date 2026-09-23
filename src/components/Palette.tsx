@@ -1,6 +1,9 @@
 import { useCallback } from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { BLOCK_TYPE_LABELS, type BlockType } from '../types/block';
+import { cx } from '../utils/helpers';
+import styles from './Palette.module.css';
+import shared from './shared.module.css';
 
 const BLOCK_TYPES: BlockType[] = ['text', 'image', 'button', 'container'];
 export const PALETTE_DRAG_PREFIX = 'palette-';
@@ -15,7 +18,7 @@ function PaletteItem({ type }: { type: BlockType }) {
     <button
       ref={setNodeRef}
       type="button"
-      className={`palette__item${isDragging ? ' palette__item--dragging' : ''}`}
+      className={cx(styles.item, isDragging && styles.itemDragging)}
       {...attributes}
       {...listeners}
     >
@@ -35,9 +38,9 @@ function PaletteRow({ type, onAdd }: PaletteRowProps) {
   const handleClick = useCallback(() => onAdd(type), [type, onAdd]);
 
   return (
-    <div className="palette__row">
+    <div className={styles.row}>
       <PaletteItem type={type} />
-      <button type="button" className="palette__add" onClick={handleClick} aria-label={`Add ${type}`}>
+      <button type="button" className={styles.add} onClick={handleClick} aria-label={`Add ${type}`}>
         +
       </button>
     </div>
@@ -48,10 +51,10 @@ function PaletteRow({ type, onAdd }: PaletteRowProps) {
 // the trade-off note on when that would change.
 export function Palette({ onAdd }: { onAdd: (type: BlockType) => void }) {
   return (
-    <div className="palette">
-      <h2 className="panel__title">Palette</h2>
-      <p className="palette__hint">Drag onto the canvas, or click to add</p>
-      <div className="palette__list">
+    <div className={styles.palette}>
+      <h2 className={shared.panelTitle}>Palette</h2>
+      <p className={styles.hint}>Drag onto the canvas, or click to add</p>
+      <div className={styles.list}>
         {BLOCK_TYPES.map((type) => (
           <PaletteRow key={type} type={type} onAdd={onAdd} />
         ))}

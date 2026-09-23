@@ -1,0 +1,140 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--sky-bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 1.5rem;
+  background: var(--sky-primary);
+  color: #fff;
+}
+
+.headerIcon {
+  flex: none;
+  color: var(--sky-gold);
+}
+
+.header h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.hero {
+  position: relative;
+  margin: 1rem auto 0;
+  max-width: 1100px;
+  width: calc(100% - 3rem);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  /* aspect-ratio + max-width, not a bare fixed height on unbounded width:
+     a fixed height with no width cap means the container stretches to an
+     extreme aspect ratio on wide screens, and object-fit: cover then shows
+     only a thin sliver of the image's vertical content. This previously
+     cropped a person's face out of the old banner; kept bounded so any
+     future image survives wide screens too. */
+  aspect-ratio: 16 / 4;
+  max-height: 200px;
+  box-shadow: var(--shadow-soft);
+}
+
+.heroImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.heroCaption {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0) 40%, rgba(30, 58, 138, 0.78) 100%);
+  padding: 1rem 1.25rem;
+}
+
+.heroCaption p {
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+}
+
+.bannerError {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border-bottom: 1px solid var(--danger-border);
+}
+
+.banner button {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: inherit;
+}
+
+.main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 220px 1fr 260px;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+}
+
+.sidebar {
+  background: var(--sky-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  padding: 1rem;
+  align-self: start;
+}
+
+.canvasArea {
+  min-height: 60vh;
+}
+
+.loading {
+  margin: auto;
+  color: var(--ink-muted);
+  font-size: 0.95rem;
+  font-family: var(--font-display);
+}
+
+@media (max-width: 900px) {
+  .hero {
+    aspect-ratio: 16 / 6;
+    width: calc(100% - 2rem);
+    margin: 0.75rem auto 0;
+  }
+
+  .main {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    align-self: stretch;
+  }
+}
