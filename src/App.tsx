@@ -16,6 +16,7 @@ import { Canvas } from './components/Canvas';
 import { PropertiesPanel } from './components/PropertiesPanel';
 import { Toolbar } from './components/Toolbar';
 import { useBuilder } from './hooks/useBuilder';
+import { resolveDragAction } from './utils/dragLogic';
 import { BLOCK_TYPE_LABELS, type BlockType } from './types/block';
 import './App.css';
 
@@ -55,25 +56,15 @@ export default function App() {
   const handleDragEnd = useCallback(
     (e: DragEndEvent) => {
       setActiveId(null);
-      const { active, over } = e;
-      if (!over) return; // dropped out of bounds — no-op, nothing breaks
+      const action = resolveDragAction({
+        activeId: String(e.active.id),
+        overId: e.over ? String(e.over.id) : null,
+        paletteType: e.active.data.current?.paletteType as BlockType | undefined,
+        order,
+      });
 
-      const activeId = String(active.id);
-
-      if (activeId.startsWith(PALETTE_DRAG_PREFIX)) {
-        const type = active.data.current?.paletteType as BlockType | undefined;
-        if (type) addBlock(type);
-        return;
-      }
-
-      const overId = String(over.id);
-      if (activeId === overId) return;
-      if (!order.includes(overId)) return;
-
-      const oldIndex = order.indexOf(activeId);
-      const newIndex = order.indexOf(overId);
-      if (oldIndex === -1 || newIndex === -1) return;
-      reorder(arrayMove(order, oldIndex, newIndex));
+      if (action.kind === 'add') addBlock(action.blockType);
+      else if (action.kind === 'reorder') reorder(arrayMove(order, action.oldIndex, action.newIndex));
     },
     [order, addBlock, reorder],
   );

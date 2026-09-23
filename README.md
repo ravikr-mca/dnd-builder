@@ -35,7 +35,7 @@ src/
 ├── hooks/        useBuilder.ts — orchestration layer over the store
 ├── state/        store.ts — zustand store (single source of truth)
 ├── types/        block.ts — Block/Layout types
-├── utils/        serialize.ts, validate.ts, helpers.ts
+├── utils/        serialize.ts, validate.ts, helpers.ts, dragLogic.ts
 ├── App.tsx        DndContext wiring, drag handlers
 └── main.tsx
 ```
@@ -44,12 +44,12 @@ src/
 
 | Requirement | How it's addressed |
 |---|---|
-| No whole-board re-render on a single-block drag/edit | State is normalized (`Record<id, Block>` + `order[]`). Each `Block` subscribes to **only its own** entry via a Zustand selector (`useBlock(id)` → `useBuilderStore(s => s.blocks[id])`), so editing or moving one block never triggers a re-render in unrelated `Block` components. |
-| Stable keys, `React.memo`, `useMemo`/`useCallback` | `Block` is wrapped in `React.memo`. All handlers passed into the list (`onSelect`, `onRemove`) are built once with `useCallback` in `Canvas`/`App`, not recreated inline per render. Derived per-block style objects use `useMemo`. |
+| No whole-board re-render on an **edit** | State is normalized (`Record<id, Block>` + `order[]`). Each `Block` subscribes to **only its own** entry via a Zustand selector (`useBlock(id)` → `useBuilderStore(s => s.blocks[id])`). Verified empirically with a render-count probe: typing into the Properties panel re-rendered only the edited block — sibling blocks logged zero additional renders. |
+| Stable keys, `React.memo`, `useMemo`/`useCallback` | `Block` is wrapped in `React.memo`. All handlers passed into the list (`onSelect`, `onRemove`) are built once with `useCallback` in `Canvas`/`App`, not recreated inline per render — including the palette's per-row add handler (`PaletteRow`), which previously created a new closure per item per render. Derived per-block style objects use `useMemo`. |
 | No inline object/function churn in the render list | `Canvas.tsx`'s `.map()` passes only primitive props (`id`, `selected`) plus the two memoized callbacks — no `() => ...` or `{ ... }` literals created per item per render. |
-| Smooth drag with many blocks | `@dnd-kit` moves the dragged element via CSS `transform` (not layout reflow) and renders the floating drag preview through a separate `DragOverlay`, so the underlying list doesn't reflow on every pointer-move tick. |
-| Update only the changed block | `updateBlockProps` in `state/store.ts` replaces `blocks[id]` alone; every other block keeps the same object reference, which is what makes the per-id selector skip re-rendering them. |
-| Virtualization | The palette is a fixed 4-item list — virtualizing it would add complexity for no benefit. Documented trade-off: if the canvas needed to support very large block counts, the next step would be `react-window` for the block list; not implemented here since dnd-kit's transform-based dragging plus memoization already keeps interaction smooth well past typical test scale, and a freely-reorderable virtualized list is a materially bigger effort than the assessment's time budget allows. |
+| Reordering **does** re-render sibling blocks, by design of the library — documented, not hidden | Verified empirically: during an active drag-to-reorder, sibling `Block` components *do* re-render repeatedly, not just the dragged one. This is `@dnd-kit/sortable`'s live "shift to make room" reflow — every sibling's own `useSortable()` hook must recompute its transform on each drag tick to animate out of the way, and that's a context-driven update inside the child, which `React.memo` cannot block (memo only stops re-renders triggered by unchanged *props*, not by a hook/context the child subscribes to itself). This is inherent to any sortable list with a live reflow preview, not specific to this codebase. It stays smooth in practice because each re-render is cheap (lightweight JSX, no expensive work in `Block`) and the actual DOM writes dnd-kit applies are GPU-composited `transform: translate3d(...)`, not layout-triggering changes — chosen deliberately over disabling the live reflow (which would make sibling re-renders during drag literally zero, at the cost of losing the "blocks shift to make room while dragging" preview). |
+| Update only the changed block | `updateBlockProps` in `state/store.ts` replaces `blocks[id]` alone; every other block keeps the same object reference, which is what makes the per-id selector skip re-rendering them on an **edit**. `reorder`/`addBlock` do change the shared `order` array reference, which is what drives the sibling re-renders described above. |
+| Virtualization | The palette is a fixed 4-item list — virtualizing it would add complexity for no benefit. Documented trade-off: if the canvas needed to support very large block counts, the next step would be `react-window` for the block list; not implemented here since the assessment's block set is small by nature (a handful of page-builder blocks, not a data table), and a freely-reorderable virtualized list is a materially bigger effort than the assessment's time budget allows. |
 
 ## Security decisions
 

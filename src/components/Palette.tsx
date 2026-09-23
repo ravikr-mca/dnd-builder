@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { BLOCK_TYPE_LABELS, type BlockType } from '../types/block';
 
@@ -23,6 +24,26 @@ function PaletteItem({ type }: { type: BlockType }) {
   );
 }
 
+interface PaletteRowProps {
+  type: BlockType;
+  onAdd: (type: BlockType) => void;
+}
+
+// Owns its own stable click handler instead of the parent creating a new
+// () => onAdd(type) closure per row on every render.
+function PaletteRow({ type, onAdd }: PaletteRowProps) {
+  const handleClick = useCallback(() => onAdd(type), [type, onAdd]);
+
+  return (
+    <div className="palette__row">
+      <PaletteItem type={type} />
+      <button type="button" className="palette__add" onClick={handleClick} aria-label={`Add ${type}`}>
+        +
+      </button>
+    </div>
+  );
+}
+
 // Small fixed list (4 types) — no virtualization needed here; see README for
 // the trade-off note on when that would change.
 export function Palette({ onAdd }: { onAdd: (type: BlockType) => void }) {
@@ -32,12 +53,7 @@ export function Palette({ onAdd }: { onAdd: (type: BlockType) => void }) {
       <p className="palette__hint">Drag onto the canvas, or click to add</p>
       <div className="palette__list">
         {BLOCK_TYPES.map((type) => (
-          <div key={type} className="palette__row">
-            <PaletteItem type={type} />
-            <button type="button" className="palette__add" onClick={() => onAdd(type)} aria-label={`Add ${type}`}>
-              +
-            </button>
-          </div>
+          <PaletteRow key={type} type={type} onAdd={onAdd} />
         ))}
       </div>
     </div>
