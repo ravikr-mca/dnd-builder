@@ -97,8 +97,8 @@ export default function App() {
         <div className="hero">
           <img
             className="hero__image"
-            src="/images/ui-ux-design-concept.jpg"
-            alt="UI and UX design illustration"
+            src="/images/ui-ux-wireframe.jpg"
+            alt="Wireframe and UI design mockups on a desk"
           />
           <div className="hero__caption">
             <p>Design layouts visually — drag, drop, done.</p>
