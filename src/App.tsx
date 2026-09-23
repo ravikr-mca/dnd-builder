@@ -94,6 +94,17 @@ export default function App() {
           <h1>Drag &amp; Drop Builder</h1>
         </header>
 
+        <div className="hero">
+          <img
+            className="hero__image"
+            src="/images/ui-ux-design-concept.jpg"
+            alt="UI and UX design illustration"
+          />
+          <div className="hero__caption">
+            <p>Design layouts visually — drag, drop, done.</p>
+          </div>
+        </div>
+
         {bannerError && (
           <div className="app__banner app__banner--error" role="alert">
             {bannerError}
