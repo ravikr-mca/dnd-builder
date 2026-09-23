@@ -70,7 +70,24 @@ src/
 - **Rapid drag operations** — handled natively by dnd-kit's sensors and React 18's automatic batching; no custom debouncing needed.
 - **Reloading a saved layout** — on mount, the app reads `localStorage` and validates it through the same schema as any other import before applying it.
 
-## Trade-offs / not implemented (time-boxed to ~2 hours)
+## Testing
 
-- Undo/redo, automated tests, and snap-to-grid (listed as bonus items) were intentionally skipped to keep the core requirements — architecture, drag interaction, performance, and security — fully implemented within the time budget, rather than partially covering everything.
+```bash
+npm run test
+```
+
+16 unit tests over the two pure-logic modules — `utils/validate.ts` and `utils/dragLogic.ts` — chosen because they carry the security- and interaction-critical decisions and need no DOM/rendering to exercise. Several encode the exact attack payloads used during manual security testing (`javascript:` URLs, CSS-injection-style colors, schema-smuggled extra keys, `order`/`blocks` id mismatches, malformed JSON) so a future change can't silently regress them.
+
+## Profiling notes (re-render behaviour with multiple blocks)
+
+Verified empirically with a temporary `console.count()` probe in `Block.tsx` (added, tested, then removed — not shipped), rather than assumed from reading the memoization code:
+
+- **Editing a block** (typing in the Properties panel, 10 keystrokes): only the edited block's render counter incremented (20 renders — React 18/19 double-invokes in dev — all on the same id). The other blocks on the canvas logged **zero** additional renders across the whole edit.
+- **Reordering a block** (an actual drag-and-drop, 3 blocks on canvas): all 3 blocks re-rendered repeatedly throughout the drag gesture, not just the moved one. Root cause: `@dnd-kit/sortable`'s live "shift to make room" reflow requires every sibling's own `useSortable()` hook to recompute its transform on each drag tick — a context-driven update inside the child that `React.memo` cannot block, since memo only stops re-renders caused by unchanged *props*, not by a hook/context the child subscribes to itself. This is inherent to any sortable list with a live reflow preview (not a memoization gap — the edit test above proves the memoization itself works), and is a known, accepted characteristic of dnd-kit's sortable preset.
+- **Why it still stays smooth**: each re-render is cheap (`Block`'s output is a handful of JSX elements, no expensive computation), and the actual DOM writes dnd-kit applies during drag are GPU-composited `transform: translate3d(...)`, not layout-triggering changes.
+- **Rapid-fire stress test**: fired 4 reorder drags back-to-back with zero pause between them (a deliberate race-condition check, not just a claim about "handling rapid operations"). Final state: exactly the expected block count, correct types, no duplicates, no console errors.
+
+## Trade-offs / not implemented (time-boxed)
+
+- Undo/redo and snap-to-grid (bonus items) were skipped to keep the core requirements — architecture, drag interaction, performance, and security — fully implemented rather than partially covering everything.
 - Styling is plain CSS by design (explicitly listed as an acceptable option in the brief) — no UI framework dependency.
