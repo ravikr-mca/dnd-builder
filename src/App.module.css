@@ -98,7 +98,11 @@
 .main {
   flex: 1;
   display: grid;
-  grid-template-columns: 220px 1fr 260px;
+  /* minmax(0, ...) not bare 1fr/220px/260px: a plain track's implicit
+     minimum is its content's min-content size, so one oversized child (e.g.
+     a fixed-width container block) can force the whole track — and every
+     grid item sharing it — wider than the viewport. minmax(0, ...) caps it. */
+  grid-template-columns: minmax(0, 220px) minmax(0, 1fr) minmax(0, 260px);
   gap: 1rem;
   padding: 1rem 1.5rem;
 }
@@ -131,7 +135,7 @@
   }
 
   .main {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .sidebar {

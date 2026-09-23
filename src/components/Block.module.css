@@ -69,4 +69,5 @@
 
 .container {
   border-radius: var(--radius-sm);
+  max-width: 100%;
 }
